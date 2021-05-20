@@ -19,8 +19,7 @@ namespace ariel
             Node *m_right;
             Node *m_left;
             Node *m_father;
-            Node(const T &v)
-                : m_value(v), m_father(nullptr), m_right(nullptr), m_left(nullptr) {}
+            Node(const T &v) : m_value(v), m_father(nullptr), m_right(nullptr), m_left(nullptr) {}
 
             ~Node()
             {
@@ -60,6 +59,7 @@ namespace ariel
 
         BinaryTree &add_root(T value)
         {
+            m_root = new Node{value};
             return *this;
         }
         BinaryTree &add_left(T father, T child)
@@ -73,7 +73,7 @@ namespace ariel
 
         friend std::ostream &operator<<(std::ostream &os, const BinaryTree &b)
         {
-            return os;
+            return os << std::endl;
         }
 
         /////iterator -
@@ -160,7 +160,7 @@ namespace ariel
         iterator end()
         {
             // return nullptr;on
-            return end_postorder();
+            return end_inorder();
         }
 
         // template <typename IT>
