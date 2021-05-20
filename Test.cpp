@@ -30,20 +30,20 @@ TEST_CASE("Basic <int> tree")
     unsigned long i = 0, j = 0, k = 0, t = 0;
     for (auto it = intTree.begin_preorder(); it != intTree.end_preorder(); ++it)
     {
-        CHECK(*it == pre.at(i));
+        CHECK(*it == pre.at(i++));
     }
     for (auto it = intTree.begin_inorder(); it != intTree.end_inorder(); ++it)
     {
-        CHECK(*it == in.at(j));
+        CHECK(*it == in.at(j++));
     }
     for (auto it = intTree.begin_postorder(); it != intTree.end_postorder(); ++it)
     {
-        CHECK(*it == post.at(k));
+        CHECK(*it == post.at(k++));
     }
 
     for (int element : intTree)
     { // this should work like inorder
-        CHECK(element == in.at(t));
+        CHECK(element == in.at(t++));
     }
 }
 
@@ -67,20 +67,20 @@ TEST_CASE("Basic <char> tree")
     unsigned long i = 0, j = 0, k = 0, t = 0;
     for (auto it = charTree.begin_preorder(); it != charTree.end_preorder(); ++it)
     {
-        CHECK(*it == pre.at(i));
+        CHECK(*it == pre.at(i++));
     }
     for (auto it = charTree.begin_inorder(); it != charTree.end_inorder(); ++it)
     {
-        CHECK(*it == in.at(j));
+        CHECK(*it == in.at(j++));
     }
     for (auto it = charTree.begin_postorder(); it != charTree.end_postorder(); ++it)
     {
-        CHECK(*it == post.at(k));
+        CHECK(*it == post.at(k++));
     }
 
     for (char element : charTree)
     { // this should work like inorder
-        CHECK(element == in.at(t));
+        CHECK(element == in.at(t++));
     }
 }
 
@@ -120,20 +120,20 @@ TEST_CASE("Object tree case")
     unsigned long i = 0, j = 0, k = 0, t = 0;
     for (auto it = studTree.begin_preorder(); it != studTree.end_preorder(); ++it)
     {
-        CHECK(*it == pre.at(i));
+        CHECK(*it == pre.at(i++));
     }
     for (auto it = studTree.begin_inorder(); it != studTree.end_inorder(); ++it)
     {
-        CHECK(*it == in.at(j));
+        CHECK(*it == in.at(j++));
     }
     for (auto it = studTree.begin_postorder(); it != studTree.end_postorder(); ++it)
     {
-        CHECK(*it == post.at(k));
+        CHECK(*it == post.at(k++));
     }
 
     for (studentName element : studTree)
     { // this should work like inorder
-        CHECK(element == in.at(t));
+        CHECK(element == in.at(t++));
     }
 }
 
@@ -185,7 +185,7 @@ TEST_CASE("add_left function")
         }
         else
         {
-            CHECK_NOTHROW(intTree.add_left(element, element));
+            CHECK_NOTHROW(intTree.add_left(prevTemp, element));
             intVec.push_back(element);
             prevTemp = element;
         }
@@ -227,7 +227,7 @@ TEST_CASE("add_right function")
         }
         else
         {
-            CHECK_NOTHROW(intTree.add_right(element, element));
+            CHECK_NOTHROW(intTree.add_right(prevTemp, element));
             intVec.push_back(element);
             prevTemp = element;
         }
