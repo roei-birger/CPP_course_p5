@@ -38,7 +38,7 @@ TEST_CASE("Basic <int> tree")
     }
     for (auto it = intTree.begin_postorder(); it != intTree.end_postorder(); ++it)
     {
-        CHECK(*it == in.at(k));
+        CHECK(*it == post.at(k));
     }
 
     for (int element : intTree)
@@ -95,7 +95,7 @@ public:
 
     friend ostream &operator<<(ostream &os, const studentName &s_name)
     {
-        return (os << s_name.name);
+        return (os << s_name.name << endl);
     }
 };
 
@@ -139,34 +139,30 @@ TEST_CASE("Object tree case")
 
 TEST_CASE("add_root function")
 {
+    BinaryTree<int> my_Tree;
+    CHECK_NOTHROW(my_Tree.add_root(1));
 
     BinaryTree<string> strTree;
     CHECK_NOTHROW(strTree.add_root("roei"););
-    for (string element : strTree)
-    {
-        CHECK(element == "roei");
-    }
+    CHECK_EQ(*strTree.begin(), "roei");
+    CHECK_EQ(*strTree.begin_preorder(), "roei");
+    CHECK_EQ(*strTree.begin_inorder(), "roei");
+    CHECK_EQ(*strTree.begin_postorder(), "roei");
+
     CHECK_NOTHROW(strTree.add_root("noa"););
-    for (string element : strTree)
-    {
-        CHECK(element != "roei");
-        CHECK(element == "noa");
-    }
+    CHECK_NE(*strTree.begin(), "roei");
+    CHECK_EQ(*strTree.begin(), "noa");
 
     BinaryTree<int> intTree;
     for (int i = 0; i < 25; ++i)
     {
         CHECK_NOTHROW(intTree.add_root(i););
-        for (int element : intTree)
-        {
-            CHECK(element == i);
-        }
+        CHECK_EQ(*intTree.begin(), i);
     }
 }
 
 TEST_CASE("add_left function")
 {
-
     BinaryTree<int> intTree;
     set<int> intSet;
     vector<int> intVec;
@@ -189,7 +185,6 @@ TEST_CASE("add_left function")
         }
         else
         {
-
             CHECK_NOTHROW(intTree.add_left(element, element));
             intVec.push_back(element);
             prevTemp = element;
@@ -232,7 +227,6 @@ TEST_CASE("add_right function")
         }
         else
         {
-
             CHECK_NOTHROW(intTree.add_right(element, element));
             intVec.push_back(element);
             prevTemp = element;
@@ -249,12 +243,3 @@ TEST_CASE("add_right function")
         CHECK(*it == intVec.at(j--));
     }
 }
-
-// TEST_CASE("add_root")
-// {
-//         BinaryTree<int> my_Tree;
-//         CHECK_NOTHROW(my_Tree.add_root(1));
-//         CHECK_EQ(*my_Tree.begin_preorder(), 1);
-//         CHECK_EQ(*my_Tree.begin_inorder(), 1);
-//         CHECK_EQ(*my_Tree.begin_postorder(), 1);
-// }
