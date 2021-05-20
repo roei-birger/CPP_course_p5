@@ -8,7 +8,7 @@ namespace ariel
     {
 
     private:
-                // Avoid copying
+        // Avoid copying
         BinaryTree(const BinaryTree &rhs);
         BinaryTree &operator=(const BinaryTree &rhs);
 
@@ -19,10 +19,8 @@ namespace ariel
             Node *m_right;
             Node *m_left;
             Node *m_father;
-            Node(const T &v, Node *f, Node *r, Node *l)
-                : m_value(v), m_father(f), m_right(r), m_left(l)
-            {
-            }
+            Node(const T &v)
+                : m_value(v), m_father(nullptr), m_right(nullptr), m_left(nullptr) {}
 
             ~Node()
             {
@@ -73,62 +71,47 @@ namespace ariel
             return *this;
         }
 
-        friend std::ostream &operator<<(std::ostream &os, const BinaryTree &b){
+        friend std::ostream &operator<<(std::ostream &os, const BinaryTree &b)
+        {
             return os;
         }
+
+        /////iterator -
 
         class iterator
         {
 
         private:
-            Node *pointer_to_current_node;
+            Node *current_node;
 
         public:
-            iterator(Node *ptr = nullptr)
-                : pointer_to_current_node(ptr)
-            {
-            }
+            iterator(Node *ptr = nullptr) : current_node(ptr) {}
 
-            // Note that the method is const as this operator does not
-            // allow changing of the iterator.
-            // Note that it returns T& as it allows to change what it points to.
-            // A const_iterator class will return const T&
-            // and the method will still be const
-            T &operator*() const
-            {
-                //return *pointer_to_current_node;
-                return pointer_to_current_node->m_value;
-            }
+            T &operator*() const { return current_node->m_value; }
 
-            T *operator->() const
-            {
-                return &(pointer_to_current_node->m_value);
-            }
+            T *operator->() const { return &(current_node->m_value); }
 
-            // ++i;
             iterator &operator++()
             {
-                //++pointer_to_current_node;
-                pointer_to_current_node = pointer_to_current_node->m_right; return *this;
+                current_node = current_node->m_right;
+                return *this;
             }
 
-            // i++;
-            // Usually iterators are passed by value and not by const& as they are small.
             const iterator operator++(int)
             {
                 iterator tmp = *this;
-                pointer_to_current_node = pointer_to_current_node->m_right;
+                current_node = current_node->m_right;
                 return tmp;
             }
 
             bool operator==(const iterator &rhs) const
             {
-                return pointer_to_current_node == rhs.pointer_to_current_node;
+                return current_node == rhs.current_node;
             }
 
             bool operator!=(const iterator &rhs) const
             {
-                return pointer_to_current_node != rhs.pointer_to_current_node;
+                return current_node != rhs.current_node;
             }
         }; // END OF CLASS ITERATOR
 
