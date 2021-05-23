@@ -15,14 +15,12 @@ namespace ariel
             T m_value;
             Node *m_right;
             Node *m_left;
-            Node *m_father;
-            Node(const T &v) : m_value(v), m_father(nullptr), m_right(nullptr), m_left(nullptr) {}
+            Node(const T &v) : m_value(v), m_right(nullptr), m_left(nullptr) {}
 
             ~Node()
             {
                 delete m_left;
                 delete m_right;
-                delete m_father; // (?)
             }
         };
 
@@ -95,7 +93,14 @@ namespace ariel
 
         BinaryTree &add_root(T value)
         {
-            m_root = new Node{value};
+            if (m_root == nullptr)
+            {
+                m_root = new Node{value};
+            }
+            else
+            {
+                m_root->m_value = value;
+            }
             return *this;
         }
 
