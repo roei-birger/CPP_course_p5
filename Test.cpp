@@ -4,6 +4,7 @@
 
 #include "BinaryTree.hpp"
 #include "doctest.h"
+
 using namespace ariel;
 using namespace std;
 

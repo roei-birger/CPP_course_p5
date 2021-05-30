@@ -1,6 +1,9 @@
 #pragma once
 #include <queue>
+#include <iostream>
+#include <algorithm>
 
+using namespace std;
 namespace ariel
 {
 
@@ -22,11 +25,88 @@ namespace ariel
                 delete m_left;
                 delete m_right;
             }
-        };
 
-        // Avoid copying
-        BinaryTree(const BinaryTree &rhs);
-        BinaryTree &operator=(const BinaryTree &rhs);
+        public:
+            // Avoid copying
+            Node(const Node &rhs) : m_value(rhs.m_value)
+            {
+                
+                if (rhs.m_right)
+                {
+                    m_right = new Node(*rhs.m_right);
+                }
+                else
+                {
+                    m_right = nullptr;
+                }
+                if (rhs.m_left)
+                {
+                    m_left = new Node(*rhs.m_left);
+                }
+                else
+                {
+                    m_left = nullptr;
+                }
+            }
+
+            Node &operator=(Node rhs)
+            {
+                if (this != &rhs)
+                {
+
+                    delete m_left;
+                    delete m_right;
+                    m_value = rhs.m_value;
+
+                    if (rhs.m_right)
+                    {
+                        m_right = new Node(*rhs.m_right);
+                    }
+                    else
+                    {
+                        m_right = nullptr;
+                    }
+                    if (rhs.m_left)
+                    {
+                        m_left = new Node(*rhs.m_left);
+                    }
+                    else
+                    {
+                        m_left = nullptr;
+                    }
+                }
+                return *this;
+
+ 
+            }
+            /////////////////////Move constructor and operator=()://////////////////////////////////
+            Node(Node &&rhs) noexcept
+            {
+                m_value = rhs.m_value;
+                m_right = rhs.m_right;
+                rhs.m_right = nullptr;
+                m_left = rhs.m_left;
+                rhs.m_left = nullptr;
+            }
+
+            Node &operator=(Node &&rhs) noexcept
+            {
+                if (m_left)
+                {
+                    delete m_left;
+                }
+                if (m_right)
+                {
+                    delete m_right;
+                }
+                m_value = rhs.m_value;
+                m_right = rhs.m_right;
+                rhs.m_right = nullptr;
+                m_left = rhs.m_left;
+                rhs.m_left = nullptr;
+            }
+            //////////////////////////////////////////////////////////////////////////////////
+        };
 
         Node *findNode(Node *root, const T val)
         {
@@ -43,12 +123,9 @@ namespace ariel
             if (rightNode == nullptr)
             {
                 return findNode(root->m_left, val);
-                ;
             }
-            else
-            {
-                return rightNode;
-            }
+
+            return rightNode;
         }
 
         static void preV(Node **root, std::vector<Node *> &m_v)
@@ -89,6 +166,43 @@ namespace ariel
 
         ~BinaryTree() { delete m_root; }
 
+        // Avoid copying
+        BinaryTree(const BinaryTree &rhs)
+        {
+            m_root = new Node(*rhs.m_root);
+        }
+
+        BinaryTree &operator=(BinaryTree rhs)
+        {
+            if (this != &rhs)
+            {
+                delete m_root;
+                m_root = new Node(*rhs.m_root);
+                return *this;
+            }
+
+            return *this;
+        }
+        ///////////////////////////Move constructor and operator=():///////////////////////////////////////
+        BinaryTree(BinaryTree &&rhs) noexcept
+        {
+            m_root = rhs.m_root;
+            rhs.m_root = nullptr;
+        }
+
+        BinaryTree &operator=(BinaryTree &&rhs) noexcept
+        {
+            if (m_root)
+            {
+                delete m_root;
+            }
+            m_root = rhs.m_root;
+            rhs.m_root = nullptr;
+            return *this;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         bool isEmpty() const { return m_root == nullptr; }
 
         BinaryTree &add_root(T value)
@@ -109,7 +223,7 @@ namespace ariel
             Node *temp = findNode(this->m_root, father);
             if (temp == nullptr)
             {
-                throw std::invalid_argument("Illigal argument");
+                throw invalid_argument("Illigal argument");
             }
             if (temp->m_left == nullptr)
             {
@@ -128,7 +242,7 @@ namespace ariel
             Node *temp = findNode(this->m_root, father);
             if (temp == nullptr)
             {
-                throw std::invalid_argument("Illigal argument");
+                throw invalid_argument("Illigal argument");
             }
             if (temp->m_right == nullptr)
             {
@@ -142,7 +256,7 @@ namespace ariel
             return *this;
         }
 
-        friend std::ostream &operator<<(std::ostream &os, const BinaryTree &b) { return os << std::endl; }
+        friend ostream &operator<<(ostream &os, const BinaryTree &b) { return os << endl; }
 
         /////iterator - /////
 
@@ -153,14 +267,12 @@ namespace ariel
             int m_order;
             unsigned long m_index;
             Node *current_node;
-            // queue<Node *> m_q;
             std::vector<Node *> m_v;
 
         public:
             iterator(Node *ptr = nullptr, int order = 0, unsigned long index = 0) : current_node(ptr), m_order(order), m_index(index)
             {
                 m_v.clear();
-                //  cout << "sizeB = " << m_v.size() << " order = " << order << endl;
                 if (ptr != nullptr)
                 {
                     if (order == -1)
@@ -176,8 +288,6 @@ namespace ariel
                         postV(&ptr, m_v);
                     }
                 }
-                //   cout << "sizeA = " << m_v.size() << endl;
-
                 m_v.push_back(nullptr);
                 current_node = m_v.at(0);
             }
@@ -192,7 +302,7 @@ namespace ariel
                 return *this;
             }
 
-            const iterator operator++(int)
+            iterator operator++(int)
             {
                 iterator tmp = *this;
                 current_node = m_v.at(++m_index);
@@ -218,7 +328,6 @@ namespace ariel
 
         iterator end_preorder()
         {
-            // return nullptr;
             return iterator{nullptr, -1};
         }
 
@@ -229,7 +338,6 @@ namespace ariel
 
         iterator end_inorder()
         {
-            // return nullptr;
             return iterator{nullptr, 0};
         }
 
@@ -252,14 +360,5 @@ namespace ariel
         {
             return end_inorder();
         }
-
-        // template <typename IT>
-        // BinaryTree(IT begin, IT end) : BinaryTree()
-        // {
-        //     for (; begin != end; ++begin)
-        //     {
-        //         push(*begin);
-        //     }
-        // }
     };
 }
